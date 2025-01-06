@@ -36,9 +36,7 @@ const StatusCell = ({getValue, row, column, table}) => {
                      }
                      key={status.id}
                      >{status.name}</MenuItem>
-            )
-           
-            )}
+            ))}
         </MenuList>
     </Menu>
   )
