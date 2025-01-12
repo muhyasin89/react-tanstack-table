@@ -4,11 +4,13 @@ import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react"
 import { STATUSES } from '../data';
 import { Box } from "@chakra-ui/react";
 
+export const ColorIcon = ({color, ...props}) => <Box w="12px" h="12px" bg={color} borderRadius="3px" {...props} />
+
+
 const StatusCell = ({getValue, row, column, table}) => {
     const {name, color} = getValue() || {};
     const {updateData} = table.options.meta;
-    const ColorIcon = ({color, ...props}) => <Box w="12px" h="12px" bg={color} borderRadius="3px" {...props} />
-
+   
   return (
     <Menu
     isLazy

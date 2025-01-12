@@ -12,12 +12,20 @@ const columns = [
     accessorKey: 'task',
     header: "Task",
     size: 225,
-    cell: EditableCell
+    cell: EditableCell,
+    enableColumnFilter: true,
+    filterFn: "includesString",
   },
   {
     accessorKey: 'status',
     header: "Status",
-    cell: StatusCell
+    cell: StatusCell,
+    enableColumnFilter: true,
+    filterFn: (row, columnId, filterStatuses) => {
+      if (filterStatuses.length === 0) return true;
+      const status = row.getValue(columnId);
+      return filterStatuses.includes(status?.id);
+    },
   },
   {
     accessorKey: 'due',
