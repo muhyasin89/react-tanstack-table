@@ -11,3 +11,4 @@ Currently, two official plugins are available:
 Reference
 
 - [React Table Tutorial (TanStack Table)](https://www.youtube.com/watch?v=CjqG277Hmgg&t=1685s) By Nikita Dev
+-[Github](https://github.com/nikitadev-yt/react-table-tutorial/blob/main)
