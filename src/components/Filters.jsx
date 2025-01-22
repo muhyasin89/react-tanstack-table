@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, InputLeftElement, InputGroup, Icon, Input, HStack } from "@chakra-ui/react";
+import {  InputLeftElement, InputGroup, Icon, Input, HStack } from "@chakra-ui/react";
 import SearchIcon from "./icons/SearchIcon";
 import FilterPopOver from './FilterPopOver';
 

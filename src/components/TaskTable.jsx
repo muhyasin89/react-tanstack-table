@@ -1,11 +1,13 @@
 import { Box } from "@chakra-ui/react";
-import { flexRender, getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
 import DATA from "../data";
 import EditableCell from "./EditableCell";
 import StatusCell from "./StatusCell";
 import DateCell from "./DateCell";
 import Filters from "./Filters"
+import { Icon, Text, ButtonGroup, Button  } from "@chakra-ui/react";
+import SortIcon from "./icons/SortIcon";
 
 const columns = [
   {
@@ -56,6 +58,8 @@ const TaskTable = () => {
     }, 
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     columnResizeMode: "onChange",
     meta: {
       updateData: (rowIndex, columnId, value) => setData(
@@ -82,6 +86,22 @@ const TaskTable = () => {
             (header) => (
               <Box className="th"  w={header.getSize()}  key={header.id}>
               {header.column.columnDef.header}
+              {
+                header.column.getCanSort() && (<Icon 
+                  as={SortIcon}
+                  mx={3}
+                  fontSize={14}
+                  onClick={
+                    header.column.getToggleSortingHandler()
+                  }
+                />)
+              }
+              {
+                 {
+                  asc: " 🔼",
+                  desc: " 🔽",
+                }[header.column.getIsSorted()]
+              }
               <Box 
                 onMouseDown={header.getResizeHandler()}
                 onTouchStart={header.getResizeHandler()}
@@ -108,6 +128,25 @@ const TaskTable = () => {
         )
       }
     </Box>
+    <Text mt={2}>
+      Page
+      {table.getState().pagination.pageIndex + 1} of {" "}
+      {table.getPageCount()}
+    </Text>
+    <ButtonGroup size="sm" isAttached variant="outline">
+    <Button
+          onClick={() => table.previousPage()}
+          isDisabled={!table.getCanPreviousPage()}
+        >
+          {"<"}
+        </Button>
+        <Button
+          onClick={() => table.nextPage()}
+          isDisabled={!table.getCanNextPage()}
+        >
+          {">"}
+        </Button>
+    </ButtonGroup>
   </Box>;
 };
 export default TaskTable;
