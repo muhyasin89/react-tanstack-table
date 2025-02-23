@@ -1,14 +1,13 @@
 import {
     flexRender,
     getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
+
     getSortedRowModel,
     useReactTable,
   } from "@tanstack/react-table";
   import "./index.css";
   import { User } from "../../types";
-  import { Box, Code, Flex, Input } from "@chakra-ui/react";
+  import { Box, Flex } from "@chakra-ui/react";
   
   import { useTableData } from "./useTableData";
 
