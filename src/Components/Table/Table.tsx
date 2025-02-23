@@ -1,15 +1,21 @@
 import {
-    flexRender,
-    getCoreRowModel,
+  flexRender,
+  getCoreRowModel,
 
-    getSortedRowModel,
-    useReactTable,
-  } from "@tanstack/react-table";
-  import "./index.css";
-  import { User } from "../../types";
-  import { Box, Flex } from "@chakra-ui/react";
-  
-  import { useTableData } from "./useTableData";
+  getFilteredRowModel,
+
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import "./index.css";
+import { User } from "../../types";
+import { Box, Flex, Input } from "@chakra-ui/react";
+import Pagination from "./Pagination";
+
+import { useTableData } from "./useTableData";
+import TableHeader from "./TableHeader";
+import { fuzzyFilter } from "./Table.utils";
 
   
   export default function Table() {
@@ -19,13 +25,25 @@ import {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        filterFns: {
+          fuzzy: fuzzyFilter,
+        },
+        globalFilterFn: fuzzyFilter,
+        getPaginationRowModel: getPaginationRowModel(),
+        enableRowSelection: true,
     });
 
     return (
         <Flex width="100vw">
           <Flex height="98vh" direction={"column"} gap={2} p={2} grow="1">
             <Flex alignItems={"center"}>
-         
+              <Input 
+                ml={2}
+                onChange={(e) => table.setGlobalFilter(e.target.value)}
+                width="300px"
+                placeholder="..."
+                />
             </Flex>
     
             <Box flex="1" overflow="auto">
@@ -34,13 +52,7 @@ import {
                   {table.getHeaderGroups().map(headerGroup =>{
                     return <tr>
                       {headerGroup.headers.map(header=>{
-                      return <th>
-                        {header.isPlaceholder 
-                        ? null 
-                        : flexRender(
-                          header.column.columnDef.header, 
-                          header.getContext()
-                        )}</th>
+                      return <TableHeader header={header} />
                     })}</tr>
                   })}
                 </thead>
@@ -76,7 +88,7 @@ import {
               </table>
             </Box>
             <Box>
-             
+              <Pagination table={table} />
             </Box>
           </Flex>
         </Flex>
