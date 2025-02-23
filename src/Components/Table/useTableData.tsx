@@ -18,12 +18,16 @@ export const useTableData = () => {
    
     columnHelper.display({
       id: "selection",
-      header: <Flex justifyContent={"center"} alignItems="center">
-        <Checkbox onChange={table.getToggleAllRowSelecthandler()}/>
-      </Flex>,
-      cell: <Flex justifyContent={"center"} alignItems="center">
-        <Checkbox />
+      header: ({table}) => (<Flex justifyContent={"center"} alignItems="center">
+        <Checkbox  isChecked={table.getIsAllRowsSelected()}
+        isIndeterminate={table.getIsSomeRowsSelected()}
+          onChange={table.getToggleAllRowsSelectedHandler()}/>
+      </Flex>),
+      cell: ({row}) => (
+        <Flex justifyContent={"center"} alignItems="center">
+          <Checkbox  onChange={row.getToggleSelectedHandler()} isChecked={row.getIsSelected()}/>
         </Flex>
+        )
     }),
     columnHelper.accessor("id", {
       id: "id",

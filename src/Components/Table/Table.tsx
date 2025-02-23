@@ -60,7 +60,11 @@ import { fuzzyFilter } from "./Table.utils";
                 <tbody>
                   {
                     table.getRowModel().rows.map(row => {
-                      return <tr>
+                      return (
+                        <tr style={{
+                          background: row.getIsSelected() ? '#161654' : '',
+                          color: row.getIsSelected() ? 'white' : 'black'
+                        }}>
                         {row.getVisibleCells().map(cell => {
                         return <td>{ 
                           flexRender(
@@ -68,6 +72,7 @@ import { fuzzyFilter } from "./Table.utils";
                           cell.getContext()
                         ) }</td>
                       })}</tr>
+                      )
                     })
                   }
                 </tbody>
