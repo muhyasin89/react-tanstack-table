@@ -13,8 +13,12 @@ const columnHelper = createColumnHelper<User>();
 export const useTableData = () => {
   const [data, setData] = useState(USERS);
 
-  const columns = useMemo(
-    () => [
-    ], [])
+  const columns = useMemo(() => [
+    columnHelper.accessor("name", {
+      id: "name",
+      header: "Name", 
+    })
+  ], [])
+
   return { columns, data}
 };
