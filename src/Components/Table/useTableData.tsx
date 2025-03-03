@@ -64,18 +64,46 @@ export const useTableData = () => {
     }),
     columnHelper.display({
       id: "delete",
-      header: 
-      <Flex justifyContent={"center"} alignItems="center">
+      header: () => (
+        <Flex justifyContent={"center"} alignItems="center">
         <FaTrash />
-      </Flex>,
-      cell: 
-      <IconButton 
-      aria-label="Delete row" 
-      icon={<FaTrash />} 
-      colorScheme="red" 
-      size="xs"/>,
+      </Flex>
+      ),
+      
+      cell: ({row}) => (
+        <Flex justifyContent={"center"} alignItems="center">
+            <IconButton 
+            aria-label="Delete row" 
+            icon={<FaTrash />} 
+            colorScheme="red" 
+            onClick={() => setData(prevData => prevData.filter(user => user.id != row.original.id))}
+            size="xs"/>
+        </Flex>
+      ),
+      size: DISPLAY_COLUMN_SIZE
     }),
-  ], [])
+    columnHelper.display({
+      id: "expand",
+      cell: ({row}) => (
+        row.getCanExpand () ? <Flex justifyContent={"center"} alignItems="center">
+          <IconButton aria-label="Expand row" icon={<FaPlus />} size="xs" onClick={row.getToggleExpandedHandler()} />
+        </Flex>: null
+      ),
+      size: DISPLAY_COLUMN_SIZE
+    })
+  ], []);
 
-  return { columns, data}
+  const columnIds = useMemo(
+    () => columns.map((column) => column.id) as string[],
+    []
+  );
+
+  const initialColumnVisibility = useMemo(() => {
+    return columnIds.reduce((acc: { [id: string]: boolean }, val) => {
+      acc[val] = true;
+      return acc;
+    }, {});
+  }, []);
+
+  return { columns, data, initialColumnVisibility, columnIds}
 };

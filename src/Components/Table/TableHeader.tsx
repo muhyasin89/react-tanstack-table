@@ -10,10 +10,11 @@ export default function TableHeader({
 }: {
     header: Header<User, unknown>;  
 }){ 
+    const isPinned = header.column.getIsPinned();
     const isSorted = header.column.getIsSorted();
 
     return (
-        <th style={{ width: header.getSize(), position: "relative" }} colSpan={header.colSpan}>
+        <th style={{ width: header.getSize(), position: "relative", ...(isPinned && {background: "rgb(97 6 79)"}) }} colSpan={header.colSpan}>
             <Menu>
                 <MenuButton
                 as={IconButton}
@@ -29,7 +30,31 @@ export default function TableHeader({
                 size='xs'
                 colorScheme={"whiteAlpha"}
                 />
-                <MenuList color="black"> 
+                <MenuList color="black">
+                {isPinned !== "right" && (
+                  <MenuItem
+                    onClick={() => header.column.pin("right")}
+                    fontSize="sm"
+                  >
+                    Pin to Right
+                  </MenuItem>
+                )}
+                {isPinned !== "left" && (
+                  <MenuItem
+                    onClick={() => header.column.pin("left")}
+                    fontSize="sm"
+                  >
+                    Pin to Left
+                  </MenuItem>
+                )}
+                {isPinned && (
+                  <MenuItem
+                    onClick={() => header.column.pin(false)}
+                    fontSize="sm"
+                  >
+                    Unpin
+                  </MenuItem>
+                )}
                 <MenuItem
                   onClick={header.column.getToggleSortingHandler()}
                   fontSize="sm"

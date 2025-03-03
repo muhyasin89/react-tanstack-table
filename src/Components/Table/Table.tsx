@@ -16,10 +16,12 @@ import Pagination from "./Pagination";
 import { useTableData } from "./useTableData";
 import TableHeader from "./TableHeader";
 import { fuzzyFilter } from "./Table.utils";
+import RowDetailView from "./RowDetailView";
+import { ColumnVisibilitySelector } from "./ColumnVisibilitySelector";
 
   
   export default function Table() {
-    const { columns, data } = useTableData();
+    const { columns, data, initialColumnVisibility, columnIds } = useTableData();
     const table = useReactTable<User>({
         data,
         columns,
@@ -32,12 +34,19 @@ import { fuzzyFilter } from "./Table.utils";
         globalFilterFn: fuzzyFilter,
         getPaginationRowModel: getPaginationRowModel(),
         enableRowSelection: true,
+        getRowCanExpand: () => true,
+
+        initialState: {
+          columnVisibility: initialColumnVisibility,
+          columnOrder: columnIds,
+        }
     });
 
     return (
         <Flex width="100vw">
           <Flex height="98vh" direction={"column"} gap={2} p={2} grow="1">
             <Flex alignItems={"center"}>
+              <ColumnVisibilitySelector table={table} columnIds={columnIds} />
               <Input 
                 ml={2}
                 onChange={(e) => table.setGlobalFilter(e.target.value)}
@@ -61,6 +70,7 @@ import { fuzzyFilter } from "./Table.utils";
                   {
                     table.getRowModel().rows.map(row => {
                       return (
+                        <>
                         <tr style={{
                           background: row.getIsSelected() ? '#161654' : '',
                           color: row.getIsSelected() ? 'white' : 'black'
@@ -72,6 +82,12 @@ import { fuzzyFilter } from "./Table.utils";
                           cell.getContext()
                         ) }</td>
                       })}</tr>
+                      {row.getIsExpanded() && (<tr>
+                          <td colSpan={row.getVisibleCells().length}>
+                          <RowDetailView user={row.original} />
+                          </td>
+                        </tr>)}
+                        </>
                       )
                     })
                   }
